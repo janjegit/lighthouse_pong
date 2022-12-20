@@ -29,3 +29,5 @@ def loginCreds(path = ""):
             token= getText(f[1])
 
     return (username, token)
+
+username, token = loginCreds("cred.txt")

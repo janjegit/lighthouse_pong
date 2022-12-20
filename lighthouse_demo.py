@@ -1,9 +1,8 @@
 from pyghthouse import Pyghthouse #Muss ggf. installiert werden!
-from login import loginCreds
+from login import username, token #Nicht vergessen, dort die Daten anzupassen!
 from random import randint
 from time import sleep
 
-username, token = loginCreds("cred.txt")
 p = Pyghthouse(username, token)
 Pyghthouse.start(p)
 
