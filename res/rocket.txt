@@ -1,0 +1,9 @@
+5 # width
+4 # height
+0 0 1 0 0
+0 1 1 1 0
+0 1 1 1 0
+1 0 0 0 1
+# R   G B
+0 0   0 0 # background
+1 255 0 0 # color 1
