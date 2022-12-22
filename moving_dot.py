@@ -19,10 +19,12 @@ def composeImg(gameObjects,img):
 def main_loop():
     p = Pyghthouse(username, token, verbosity=VerbosityLevel.NONE)
     ball = GameObj(4,4,5,6)
+    objects = [ball]
     p.start()
     while True:
         img = p.empty_image()
-        composeImg([ball],img)
+        composeImg(objects,img)
+        print(img)
         p.set_image(img)
         s = input()
         for c in s.upper():
