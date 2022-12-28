@@ -1,13 +1,11 @@
 class GameObj:
-    def __init__(self,w,h,x,y):
+    def __init__(self,name,w,h,x,y):
+        self.name = name 
         self.dim = (w,h)
         self.pos = (x,y)
         self.pixels = [(i % w, i // w) for i in range(w*h)]
         self.visible = True
     
-    def setVisiblility(self,b):
-        self.visible = b
-
     def toggleVisible(self):
         self.visible = not self.visible 
 
