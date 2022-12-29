@@ -1,20 +1,49 @@
-class GameObj:
-    def __init__(self,name,w,h,x,y):
-        self.name = name 
-        self.dim = (w,h)
-        self.pos = (x,y)
-        self.pixels = [(i % w, i // w) for i in range(w*h)]
-        self.visible = True
+from pyghthouse import Pyghthouse, VerbosityLevel
+from login import username, token
+from time import sleep
+
+from vector import Vector2D
+from gameobj import GameObj
+
+def draw(p,gameObjs):
+    img = p.empty_image()
+
+    for _,obj in gameObjs.items():
+        if obj.visible:
+            for x,y in obj.getPixels():
+                x = int(x)
+                y = int(y)
+                if y>=0 and y<len(img) and x>=0 and x<len(img[0]):
+                    img[y][x] = [255, 255, 255]
+    p.set_image(img)
+
+def update(objs):
+    for _,obj in objs.items():
+        obj.update()
+
+def initGameObj():
+    displDim = (28,14) 
+    BALL_START = (displDim[0]//2,0)
+
+    objects = {"ball" : GameObj("ball",2,2,BALL_START)}
+    objects["ball"].vel = Vector2D(10,8)
     
-    def toggleVisible(self):
-        self.visible = not self.visible 
+    return objects
 
-    def moveBy(self,dx,dy):
-        self.pos = (self.pos[0]+dx,self.pos[1]+dy)
+def main_loop():
+    p = Pyghthouse(username, token, verbosity=VerbosityLevel.NONE)
+    p.start()
+    
+    objects = initGameObj()
 
-    def moveTo(self,x,y):
-        self.pos = (x,y)
+    while True:
+        update(objects)
+        draw(p,objects)
+        print(objects["ball"])
+        sleep(0.08)
 
-    def getPixels(self):
-        x,y = self.pos
-        return [(p[0]+x,p[1]+y) for p in self.pixels]
+
+# TODO Ball ändert die Farbe, wenn Bildschirmrand
+
+if __name__ == '__main__':
+    main_loop()
