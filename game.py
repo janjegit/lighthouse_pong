@@ -3,7 +3,7 @@ from login import username, token
 from time import sleep
 
 from vector import Vector2D
-from gameobj import GameObj
+from gameobj import GameObj, Color
 
 def draw(p,gameObjs):
     img = p.empty_image()
@@ -24,13 +24,13 @@ def update(objs):
 def initGameObj():
     displDim = (28,14) 
     BALL_START = (displDim[0]//2,0)
-
-    objects = {"ball" : GameObj("ball",2,2,BALL_START)}
-    objects["ball"].vel = Vector2D(10,8)
+    
+    objects = {"ball" : GameObj("ball",1,1,BALL_START)}
+    objects["ball"].vel = Vector2D(1,1)
     
     return objects
 
-def main_loop():
+def main():
     p = Pyghthouse(username, token, verbosity=VerbosityLevel.NONE)
     p.start()
     
@@ -46,4 +46,4 @@ def main_loop():
 # TODO Ball ändert die Farbe, wenn Bildschirmrand
 
 if __name__ == '__main__':
-    main_loop()
+    main()

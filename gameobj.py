@@ -1,7 +1,13 @@
 from vector import Vector2D
 
+class Color:
+    def __init__(self,r,g,b):
+        self.r = r
+        self.g = g
+        self.b = b
+
 class GameObj:
-    def __init__(self,name,w,h,pos):
+    def __init__(self,name,w,h,pos,color):
         self.name = name 
         self.w = w
         self.h = h
@@ -58,7 +64,6 @@ class GameObj:
             self.moveTo(x,y)
             self.vel = self.vel * Vector2D(-0.8,0.8)
         
-
     def getPixels(self):
         x,y = self.pos.x,self.pos.y
         return [(px+x,py+y) for px,py in self.pixels]

@@ -2,8 +2,8 @@ import math
 
 class Vector2D:
     def __init__(self,x=0.0,y=0.0):
-        self.x = x
-        self.y = y
+        self.x = round(x,5)
+        self.y = round(y,5)
     
     def norm(self):
         x = self.x / self.mag()
