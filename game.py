@@ -39,9 +39,6 @@ def initGameObjects():
     
     return objects
 
-def reset(objects):
-    pass
-
 def initLighthouse():
     p = Pyghthouse(username, token, verbosity=VerbosityLevel.NONE)
     p.start()

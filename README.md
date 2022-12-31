@@ -12,6 +12,15 @@ username "your_username"
 token "api_token" 
 ```
 
+## Requirements
+
+For running this you need the the libraries `pyghthouse` and `pynput`.
+
+```
+pip install pynput;
+pip install pyghthouse
+```
+
 ## Keyboard controls
 
 - `G` - start game
