@@ -2,6 +2,16 @@
 
 This is a simple pong game for the lighthouse project at our university CAU in Kiel.
 
+## Connecting to lighthouse
+
+To connect the game to the lighthouse 
+create a file named `cred.txt` in game directory with following content:
+
+```
+username "your_username"
+token "api_token" 
+```
+
 ## Keyboard controls
 
 - `G` - start game
