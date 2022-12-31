@@ -1,97 +1,12 @@
 import random
 
 from pyghthouse import Pyghthouse, VerbosityLevel
-from login import username, token
 from time import sleep
 
+from login import username, token
 from vector import Vector2D
-from gameobj import GameObj, Color
-
-class Paddle(GameObj):
-
-    def update(self,f=Vector2D(0,0)):
-        self.applyForce(f)
-        self.acclerate()
-        self.clearAcc()
-        self.move()
-
-        displ_h=14
-        displ_w=28
-        boundry = False
-        if self.pos.y + self.h > displ_h:
-            x,y = self.pos.x, (displ_h - self.h)
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(1,-1)
-            boundry = True
-
-        if self.pos.y < 0:
-            x,y = self.pos.x, 0.0
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(1,-1)
-            boundry = True
-
-        if self.pos.x + self.w > displ_w:
-            x,y = (displ_w - self.w), self.pos.y
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(-1,1)
-            boundry = True
-
-        if self.pos.x < 0:
-            x,y = 0.0 , self.pos.y
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(-1,1)
-            boundry = True
-
-        if boundry:
-            r = random.randint(100,255)
-            g = random.randint(100,255)
-            b = random.randint(100,255)
-            self.color = Color(r,g,b)
-
-# Ball
-class Ball(GameObj):
-
-
-    def update(self,f=Vector2D(0,0)):
-        self.applyForce(f)
-        self.acclerate()
-        self.clearAcc()
-        self.move()
-
-        displ_h=14
-        displ_w=28
-        boundry = False
-        if self.pos.y + self.h > displ_h:
-            x,y = self.pos.x, (displ_h - self.h)
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(1,-1)
-            boundry = True
-
-        if self.pos.y < 0:
-            x,y = self.pos.x, 0.0
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(1,-1)
-            boundry = True
-
-        if self.pos.x + self.w > displ_w:
-            x,y = (displ_w - self.w), self.pos.y
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(-1,1)
-            boundry = True
-
-        if self.pos.x < 0:
-            x,y = 0.0 , self.pos.y
-            self.moveTo(x,y)
-            self.vel = self.vel * Vector2D(-1,1)
-            boundry = True
-
-        if boundry:
-            r = random.randint(100,255)
-            g = random.randint(100,255)
-            b = random.randint(100,255)
-            self.color = Color(r,g,b)
-
-
+from control import Controller
+from gameobj import Ball, Paddle, Color
 
 def draw(p,gameObjs):
     img = p.empty_image()
@@ -110,33 +25,59 @@ def update(objs):
     for name,obj in objs.items():
         obj.update()
 
-def initGameObj():
+def initGameObjects():
     displDim = (28,14) 
-    BALL_START = (displDim[0]//2,displDim[1]//2)
-    PL1_START = (displDim[0]//2,1)
-    PL2_START = (displDim[0]//2,displDim[1]-2)
+    BALL_START= (displDim[0]//2,displDim[1]//2)
+    PL1_START = ((displDim[0]//2)-2,1)
+    PL2_START = ((displDim[0]//2)-2,displDim[1]-2)
     
     objects = {"ball" : Ball("ball",2,1,BALL_START,Color(255,0,0)),
-               "pl1" : GameObj("pl1",5,1,PL1_START,Color(255,255,255)),
-               "pl2" : GameObj("pl2",5,1,PL2_START,Color(255,255,255))}
-    objects["ball"].vel = Vector2D(0.5,0.5)
+               "pl1" : Paddle("pl1",5,1,PL1_START,Color(255,255,255)),
+               "pl2" : Paddle("pl2",5,1,PL2_START,Color(255,255,255))}
+    objects["ball"].pl1 = objects["pl1"]
+    objects["ball"].pl2 = objects["pl2"]
     
     return objects
 
-def main():
+def reset(objects):
+    pass
+
+def initLighthouse():
     p = Pyghthouse(username, token, verbosity=VerbosityLevel.NONE)
     p.start()
+    return p
+
+def initControls(objects):
     
-    objects = initGameObj()
+
+    actions = {"left" : lambda obj : obj.applyForce(Vector2D(-0.5,0)),
+               "stop" : lambda obj : obj.setVel(Vector2D()),
+               "launch" : lambda obj : obj.launch(),
+               "right" : lambda obj : obj.applyForce(Vector2D(0.5,0))}
+    
+    ball_binds= {"g" : "launch"}
+
+    pl1_binds = {"a" : "left",
+                 "s" : "stop",
+                 "d" : "right"}
+
+    pl2_binds = {"j" : "left",
+                 "k" : "stop",
+                 "l" : "right"}
+
+    return [Controller(objects["ball"],ball_binds,actions),
+            Controller(objects["pl1"],pl1_binds,actions),
+            Controller(objects["pl2"],pl2_binds,actions)]
+
+def main():
+    p = initLighthouse()
+    objects = initGameObjects()
+    controls = initControls(objects)
 
     while True:
         update(objects)
         draw(p,objects)
-        print(objects["ball"])
         sleep(0.08)
-
-
-# TODO Ball ändert die Farbe, wenn Bildschirmrand
 
 if __name__ == '__main__':
     main()

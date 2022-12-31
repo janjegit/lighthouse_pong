@@ -1,4 +1,3 @@
-from game import GameObj
 from pynput import keyboard
 
 class Controller:
@@ -11,7 +10,6 @@ class Controller:
 
     def on_press(self,key):
         try:
-            print('alphanumeric key {0} pressed'.format(key.char))
             if key.char in self.binds:
                 self.actions[self.binds[key.char]](self.obj)
         except AttributeError:
@@ -19,5 +17,4 @@ class Controller:
 
     def on_release(self,key):
         if key == keyboard.Key.esc:
-            # Stop listener
             return False
